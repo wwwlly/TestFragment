@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState != null){
             Log.d(TAG,"savedInstanceState is not null");
             current = savedInstanceState.getInt("current");
-            fm.beginTransaction().replace(R.id.fl_content, Fragment.instantiate(MainActivity.this, SecondFragment.class.getName())).commit();
         }else{
             fm.beginTransaction().add(R.id.fl_content, Fragment.instantiate(this, FirstFragment.class.getName())).commit();
         }
@@ -66,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 解决崩溃后fragment混乱
+     * fragment不需要处理FragmentActivity已经处理过，但是在onCreate中init并添加fragment时一定要在
+     * savedInstanceState为空的时候添加，不为空时FragmentActivity已经处理过;我们要做的是处理fragment之外
+     * 的东西，比如：tvFirst和tvSecond的行为也就是current,onSaveInstanceState中记载onCreate中读取。
      * @param outState
      */
     @Override
